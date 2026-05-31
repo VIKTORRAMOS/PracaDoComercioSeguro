@@ -8,10 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* ==================== ESTILIZAÇÃO CSS ==================== */
         :root {
-            --primary-color: #1e3a8a; /* Azul Marinho Segurança */
+            /* Variáveis Globais de Cores: Centraliza a paleta de cores para facilitar manutenção e consistência */
+            --primary-color: #1e3a8a; /* Azul Marinho Segurança: Identidade visual principal */
             --secondary-color: #2563eb;
-            --accent-color: #10b981; /* Verde Sucesso */
+            --accent-color: #10b981; /* Verde Sucesso: Usado para ações positivas (botão enviar) */
             --bg-color: #f1f5f9;
             --text-dark: #1e293b;
         }
@@ -19,8 +21,10 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
+            /* Efeito de Fundo: Cria um padrão sutil de pontos (grid) usando gradiente radial */
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 20px 20px;
+            /* Alinhamento Central: Flexbox garante o formulário perfeitamente centralizado na tela */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -36,6 +40,7 @@
             padding: 40px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            /* Linha Temática Superior: Reforça a cor principal do sistema no topo do card */
             border-top: 8px solid var(--primary-color);
         }
 
@@ -77,10 +82,12 @@
             font-size: 14px;
         }
 
+        /* Container de Input com Ícone: Permite o posicionamento absoluto do ícone dentro do campo */
         .input-wrapper {
             position: relative;
         }
 
+        /* Posicionamento do Ícone: Fixado à esquerda, centralizado verticalmente no campo */
         .input-wrapper i {
             position: absolute;
             left: 12px;
@@ -89,6 +96,7 @@
             color: #94a3b8;
         }
 
+        /* Estilização Geral dos Campos: padding-left de 40px evita que o texto sobreponha o ícone */
         input, select, textarea {
             width: 100%;
             padding: 12px 12px 12px 40px;
@@ -100,18 +108,21 @@
             font-family: inherit;
         }
 
+        /* Ajuste do Campo de Texto Longo: Remove a necessidade do ícone lateral esquerdo */
         textarea {
             padding-left: 15px;
             resize: vertical;
             min-height: 100px;
         }
 
+        /* Feedback Visual de Foco: Realça o campo ativo mudando a cor da borda e aplicando sombra suave */
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--secondary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
+        /* Botões de Ação */
         .btn-submit {
             width: 100%;
             background-color: var(--accent-color);
