@@ -1,17 +1,16 @@
 <?php
-// 1. MOSTRAR ERROS (Para resolver a tela branca)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+// Gerenciamento de Sessão: Inicializa a sessão para permitir o controle de login do administrador
 session_start();
 
-// 2. CONEXÃO (Ajustado para o nome do seu arquivo)
+// 1. CONEXÃO (Ajustado para o nome do seu arquivo)
 require 'db.php'; 
 
+// Credencial de Acesso: Senha estática definida para validação simplificada do painel
 $senha_correta = "203";
 
-// 3. LÓGICA DE LOGIN
+// 2. LÓGICA DE LOGIN
+/* Autenticação em Camada: Se a sessão 'logado' não existir, o sistema verifica se uma tentativa de login 
+   foi enviada por POST. Caso a senha esteja correta, inicializa a sessão. Caso contrário, exibe a tela de login. */
 if (!isset($_SESSION['logado'])) {
     if (isset($_POST['senha']) && $_POST['senha'] == $senha_correta) {
         $_SESSION['logado'] = true;
@@ -25,6 +24,7 @@ if (!isset($_SESSION['logado'])) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Interface de Login: Centralização absoluta e layout minimalista focado na segurança do painel */
         body { font-family: 'Inter', sans-serif; background: #f1f5f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .login-card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 350px; border-top: 6px solid #1e3a8a; }
         .login-card i { font-size: 3rem; color: #1e3a8a; margin-bottom: 15px; }
@@ -46,11 +46,15 @@ if (!isset($_SESSION['logado'])) {
 </body>
 </html>
 <?php
+        /* Interrupção de Fluxo: Garante que o restante do código do Dashboard (tabela de dados) 
+           não seja carregado ou processado caso o usuário não tenha passado pela autenticação. */
         exit;
     }
 }
 
-// 4. BUSCA OS DADOS (Ordem crescente por ID)
+// 3. BUSCA OS DADOS (Ordem crescente por ID)
+/* Consulta ao Banco de Dados: Executa uma query de seleção trazendo todas as colunas ordenadas por ID.
+   Os registros são armazenados como um array associativo na variável $registros. */
 $stmt = $pdo->query("SELECT * FROM cidadao ORDER BY id ASC");
 $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -63,6 +67,7 @@ $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Estilização Avançada do Painel: Organização visual limpa orientada para a legibilidade de dados estruturados */
         body { font-family: 'Inter', sans-serif; background: #f8fafc; margin: 0; padding: 20px; color: #1e293b; }
         .header { display: flex; justify-content: space-between; align-items: center; background: #1e3a8a; color: white; padding: 20px 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .header h1 { margin: 0; font-size: 22px; display: flex; align-items: center; gap: 10px; }
@@ -75,6 +80,7 @@ $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
         td { padding: 15px; border-top: 1px solid #f1f5f9; font-size: 14px; }
         tr:hover { background: #f8fafc; }
         
+        /* Badges de Status: Elementos de interface gráfica para identificação ágil da situação de cada caso */
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
         .status-pendente { background: #fef3c7; color: #92400e; }
         .status-resolvido { background: #dcfce7; color: #166534; }
@@ -118,7 +124,7 @@ $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </td>
                 <td>
                     <?php 
-                        // Lógica corrigida para mostrar "Outros"
+                        // Mapeamento de Siglas: Converte os caracteres do banco (F, L, O) em strings descritivas amigáveis
                         if($row['problema'] == 'F') echo '🚨 Furto';
                         elseif($row['problema'] == 'L') echo '💡 Iluminação';
                         elseif($row['problema'] == 'O') echo '⚠️ Outros';
@@ -128,6 +134,7 @@ $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td style="max-width: 300px; color: #475569; font-size: 13px;"><?= nl2br(htmlspecialchars($row['descricao'])) ?></td>
                 <td>
                     <?php 
+                        // Atribuição de Classes Dinâmicas: Escolhe a cor da badge de acordo com o status atual do registro
                         $class = $row['status'] == 'Resolvido' ? 'status-resolvido' : ($row['status'] == 'Não Resolvido' ? 'status-erro' : 'status-pendente');
                     ?>
                     <span class="badge <?= $class ?>"><?= $row['status'] ?></span>
